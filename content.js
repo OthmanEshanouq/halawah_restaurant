@@ -204,12 +204,12 @@ const contentData = {
         },
         phone: "0787426310",
         cuisine: {
-            en: "Middle Eastern & International (100% Halal)",
-            ar: "شرق أوسطي ودولي (حلال 100%)"
+            en: "Arabian Food, International Food, and a dedicated Dessert Section (100% Halal)",
+            ar: "طعام عربي، طعام دولي، وقسم حلويات مخصص (حلال 100%)"
         },
         drinks: {
-            en: "Full coffee house menu (Espresso, Latte, etc.) + Fresh juices and Soda",
-            ar: "قائمة كاملة لمقهى (إسبريسو، لاتيه، إلخ) + عصائر طازجة ومشروبات غازية"
+            en: "Full Coffee House menu (Espresso, Lattes, etc.) + Fresh Drinks",
+            ar: "قائمة كاملة لمقهى (إسبريسو، لاتيه، إلخ) + مشروبات طازجة"
         },
         schedule: {
             lunch: {

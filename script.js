@@ -125,6 +125,7 @@ function switchLanguage(lang) {
     // Reload dynamic content
     loadReviews();
     loadFAQ();
+    renderCalendar(); // Regenerate calendar with new language
     // Reset carousel position when language changes
     resetCarousel();
 }
@@ -139,10 +140,29 @@ function applyLanguage(lang) {
         const text = lang === 'ar' ? element.getAttribute('data-ar') : element.getAttribute('data-en');
         if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
             element.placeholder = text;
+        } else if (element.tagName === 'OPTION') {
+            // Handle option elements
+            const optionText = lang === 'ar' ? element.getAttribute('data-ar') : element.getAttribute('data-en');
+            if (optionText) {
+                element.textContent = optionText;
+            }
         } else {
             element.textContent = text;
         }
     });
+    
+    // Update meal time options
+    const mealTimeSelect = document.getElementById('meal-time');
+    if (mealTimeSelect) {
+        const lunchOption = mealTimeSelect.querySelector('option[value="lunch"]');
+        const dinnerOption = mealTimeSelect.querySelector('option[value="dinner"]');
+        if (lunchOption) {
+            lunchOption.textContent = lang === 'ar' ? lunchOption.getAttribute('data-ar') : lunchOption.getAttribute('data-en');
+        }
+        if (dinnerOption) {
+            dinnerOption.textContent = lang === 'ar' ? dinnerOption.getAttribute('data-ar') : dinnerOption.getAttribute('data-en');
+        }
+    }
 }
 
 // ============================================
@@ -162,42 +182,16 @@ function initializeReservation() {
     // Initialize calendar
     renderCalendar();
     
-    // Calendar navigation
+    // Calendar navigation - Only show January 2026 (one month only)
     const prevMonthBtn = document.getElementById('prev-month');
     const nextMonthBtn = document.getElementById('next-month');
     
+    // Disable navigation buttons since we only show one month
     if (prevMonthBtn) {
-        prevMonthBtn.addEventListener('click', function() {
-            // Don't allow going before January 2026
-            if (currentYear === 2026 && currentMonth === 0) {
-                return;
-            }
-            
-            currentMonth--;
-            if (currentMonth < 0) {
-                currentMonth = 11;
-                currentYear--;
-            }
-            
-            // Ensure we don't go below January 2026
-            if (currentYear < 2026 || (currentYear === 2026 && currentMonth < 0)) {
-                currentMonth = 0;
-                currentYear = 2026;
-            }
-            
-            renderCalendar();
-        });
+        prevMonthBtn.style.display = 'none';
     }
-    
     if (nextMonthBtn) {
-        nextMonthBtn.addEventListener('click', function() {
-            currentMonth++;
-            if (currentMonth > 11) {
-                currentMonth = 0;
-                currentYear++;
-            }
-            renderCalendar();
-        });
+        nextMonthBtn.style.display = 'none';
     }
     
     // Form submission
@@ -213,28 +207,23 @@ function initializeReservation() {
             showReservationStep(1);
         });
     }
+    
+    // Hide reservation info initially
+    const reservationInfo = document.getElementById('reservation-info');
+    if (reservationInfo) {
+        reservationInfo.classList.add('hidden');
+    }
 }
 
 function renderCalendar() {
     const calendarGrid = document.getElementById('calendar-grid');
     const monthYearDisplay = document.getElementById('calendar-month-year');
-    const prevMonthBtn = document.getElementById('prev-month');
-    const nextMonthBtn = document.getElementById('next-month');
     
     if (!calendarGrid) return;
     
-    // Disable prev button if we're at January 2026
-    if (prevMonthBtn) {
-        if (currentYear === 2026 && currentMonth === 0) {
-            prevMonthBtn.style.opacity = '0.5';
-            prevMonthBtn.style.cursor = 'not-allowed';
-            prevMonthBtn.disabled = true;
-        } else {
-            prevMonthBtn.style.opacity = '1';
-            prevMonthBtn.style.cursor = 'pointer';
-            prevMonthBtn.disabled = false;
-        }
-    }
+    // Only show January 2026 (one month only)
+    currentMonth = 0; // January
+    currentYear = 2026;
     
     // Get month name
     const monthNames = currentLanguage === 'ar' 
@@ -272,7 +261,7 @@ function renderCalendar() {
         calendarGrid.appendChild(emptyCell);
     }
     
-    // Add days of month
+    // Add days of month - show ALL days
     for (let day = 1; day <= daysInMonth; day++) {
         const date = new Date(currentYear, currentMonth, day);
         const dayCell = document.createElement('div');
@@ -284,8 +273,10 @@ function renderCalendar() {
         const dayOfWeek = date.getDay(); // 0 = Sunday, 4 = Thursday, 5 = Friday, 6 = Saturday
         
         if (date < minDate || (dayOfWeek !== 4 && dayOfWeek !== 5 && dayOfWeek !== 6)) {
+            // Disable but still show the day
             dayCell.classList.add('disabled');
         } else {
+            // Available for selection
             dayCell.classList.add('available');
             dayCell.addEventListener('click', function() {
                 selectDate(date);
@@ -296,7 +287,11 @@ function renderCalendar() {
             if (date <= firstWeekEnd && (dayOfWeek === 4 || dayOfWeek === 5)) {
                 const badge = document.createElement('div');
                 badge.className = 'scarcity-badge';
-                badge.textContent = currentLanguage === 'ar' ? 'مقاعد محدودة' : 'Limited Seats';
+                if (currentLanguage === 'ar') {
+                    badge.innerHTML = 'مقاعد<br>محدودة';
+                } else {
+                    badge.innerHTML = 'Almost<br>Sold Out';
+                }
                 dayCell.appendChild(badge);
             }
         }
@@ -317,6 +312,12 @@ function selectDate(date) {
     selectedDate = date;
     renderCalendar();
     showReservationStep(2);
+    
+    // Show reservation info (cost and capacity)
+    const reservationInfo = document.getElementById('reservation-info');
+    if (reservationInfo) {
+        reservationInfo.classList.remove('hidden');
+    }
     
     // Display selected date
     const dateDisplay = document.getElementById('selected-date-display');
@@ -362,6 +363,9 @@ function handleReservationSubmit(e) {
     if (!fullName) {
         showError('name-error', currentLanguage === 'ar' ? 'الاسم الكامل مطلوب' : 'Full name is required');
         isValid = false;
+    } else if (!validateFullName(fullName)) {
+        showError('name-error', currentLanguage === 'ar' ? 'يرجى إدخال الاسم الكامل (ثلاثة أسماء على الأقل)' : 'Please enter full name (at least 3 words)');
+        isValid = false;
     }
     
     if (!phone) {
@@ -374,6 +378,12 @@ function handleReservationSubmit(e) {
     
     if (!people) {
         showError('people-error', currentLanguage === 'ar' ? 'يرجى اختيار عدد الأشخاص' : 'Please select number of people');
+        isValid = false;
+    }
+    
+    const mealTime = document.getElementById('meal-time').value;
+    if (!mealTime) {
+        showError('meal-time-error', currentLanguage === 'ar' ? 'يرجى اختيار وقت الوجبة' : 'Please select meal time');
         isValid = false;
     }
     
@@ -390,9 +400,16 @@ function handleReservationSubmit(e) {
             name: fullName,
             phone: phone,
             people: people,
+            mealTime: mealTime,
             date: selectedDate
         });
     }
+}
+
+function validateFullName(name) {
+    // Full name must have at least 3 words (captures)
+    const nameParts = name.trim().split(/\s+/);
+    return nameParts.length >= 3;
 }
 
 function validateJordanianPhone(phone) {
@@ -506,20 +523,24 @@ function resetCarousel() {
 
 function loadFAQ() {
     const faqContainer = document.getElementById('faq-container');
-    const faqMainTitle = document.getElementById('faq-main-title');
+    const faqToggleBtn = document.getElementById('faq-toggle-btn');
     
     if (!faqContainer || typeof contentData === 'undefined') return;
     
-    // Initialize main title click (first toggle - reveal/hide list)
-    if (faqMainTitle) {
-        faqMainTitle.addEventListener('click', function() {
+    // Initialize toggle button click (first toggle - reveal/hide list)
+    if (faqToggleBtn) {
+        // Remove any existing listeners by cloning
+        const newBtn = faqToggleBtn.cloneNode(true);
+        faqToggleBtn.parentNode.replaceChild(newBtn, faqToggleBtn);
+        
+        newBtn.addEventListener('click', function() {
             const isHidden = faqContainer.classList.contains('hidden');
             if (isHidden) {
                 faqContainer.classList.remove('hidden');
-                faqMainTitle.classList.add('active');
+                newBtn.classList.add('active');
             } else {
                 faqContainer.classList.add('hidden');
-                faqMainTitle.classList.remove('active');
+                newBtn.classList.remove('active');
                 // Close all FAQ items when hiding
                 faqContainer.querySelectorAll('.faq-item').forEach(item => {
                     item.classList.remove('active');
@@ -693,9 +714,7 @@ function loadPreferences() {
 }
 
 // ============================================
-// Initialize Calendar on Page Load
+// Initialize Date Cards on Page Load
 // ============================================
 
-// Set initial date to January 2026
-currentMonth = 0; // January
-currentYear = 2026;
+// Date cards are generated on page load via initializeReservation()
