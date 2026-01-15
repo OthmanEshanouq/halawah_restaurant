@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halawah - حلاوة | Restaurant in Khalda, Amman</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header class="header">
+        <nav class="nav container">
+            <div class="logo">
+                <h1 data-en="Halawah" data-ar="حلاوة">Halawah</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home" data-en="Home" data-ar="الرئيسية">Home</a></li>
+                <li><a href="#about" data-en="About Us" data-ar="من نحن">About Us</a></li>
+                <li><a href="#menu" data-en="Menu" data-ar="القائمة">Menu</a></li>
+                <li><a href="#contact" data-en="Contact" data-ar="اتصل بنا">Contact</a></li>
+            </ul>
+            <div class="header-controls">
+                <div class="language-toggle">
+                    <button class="lang-btn active" data-lang="en">EN</button>
+                    <button class="lang-btn" data-lang="ar">AR</button>
+                </div>
+                <div class="theme-switcher">
+                    <button class="theme-btn" data-theme="light" title="Light Mode">
+                        <span>☀️</span>
+                    </button>
+                    <button class="theme-btn" data-theme="dark" title="Dark Mode">
+                        <span>🌙</span>
+                    </button>
+                    <button class="theme-btn active" data-theme="grey" title="Grey Mode">
+                        <span>⚫</span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <video class="hero-video" autoplay muted loop playsinline>
+            <source src="https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4" type="video/mp4">
+            <!-- Fallback image if video doesn't load -->
+        </video>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h2 class="hero-title" data-en="Experience the Fusion of Local & International Flavors" data-ar="اختبر اندماج النكهات المحلية والدولية">Experience the Fusion of Local & International Flavors</h2>
+            <button class="cta-button" id="book-now-btn" data-en="Book Now" data-ar="احجز الآن">Book Now</button>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section">
+        <div class="container">
+            <h2 class="section-title" data-en="About Halawah" data-ar="عن حلاوة">About Halawah</h2>
+            <div class="about-content">
+                <div class="info-card">
+                    <h3 data-en="Location" data-ar="الموقع">Location</h3>
+                    <p data-en="Khalda, Amman" data-ar="خلدا، عمان">Khalda, Amman</p>
+                </div>
+                <div class="info-card">
+                    <h3 data-en="Cuisine" data-ar="المطبخ">Cuisine</h3>
+                    <p data-en="Middle Eastern & International (100% Halal)" data-ar="شرق أوسطي ودولي (حلال 100%)">Middle Eastern & International (100% Halal)</p>
+                </div>
+                <div class="info-card">
+                    <h3 data-en="Drinks" data-ar="المشروبات">Drinks</h3>
+                    <p data-en="Full coffee house menu (Espresso, Latte, etc.) + Fresh juices and Soda" data-ar="قائمة كاملة لمقهى (إسبريسو، لاتيه، إلخ) + عصائر طازجة ومشروبات غازية">Full coffee house menu (Espresso, Latte, etc.) + Fresh juices and Soda</p>
+                </div>
+                <div class="info-card">
+                    <h3 data-en="Schedule" data-ar="الجدول">Schedule</h3>
+                    <p>
+                        <span data-en="Lunch: 15:00 - 18:00 (Open Buffet)" data-ar="الغداء: 15:00 - 18:00 (بوفيه مفتوح)">Lunch: 15:00 - 18:00 (Open Buffet)</span><br>
+                        <span data-en="Dinner: 20:00 - 23:00 (Open Buffet)" data-ar="العشاء: 20:00 - 23:00 (بوفيه مفتوح)">Dinner: 20:00 - 23:00 (Open Buffet)</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reservation Section -->
+    <section id="reservation" class="section reservation-section">
+        <div class="container">
+            <h2 class="section-title" data-en="Make a Reservation" data-ar="احجز طاولة">Make a Reservation</h2>
+            <div id="reservation-container">
+                <!-- Step 1: Calendar -->
+                <div id="reservation-step-1" class="reservation-step">
+                    <div class="calendar-container">
+                        <div class="calendar-header">
+                            <button class="calendar-nav" id="prev-month">‹</button>
+                            <h3 id="calendar-month-year"></h3>
+                            <button class="calendar-nav" id="next-month">›</button>
+                        </div>
+                        <div class="calendar-grid" id="calendar-grid"></div>
+                        <p class="calendar-note" data-en="Please select Thursday, Friday, or Saturday" data-ar="يرجى اختيار الخميس أو الجمعة أو السبت">Please select Thursday, Friday, or Saturday</p>
+                    </div>
+                </div>
+
+                <!-- Step 2: Form -->
+                <div id="reservation-step-2" class="reservation-step hidden">
+                    <form id="reservation-form" class="reservation-form">
+                        <div class="form-group">
+                            <label for="full-name" data-en="Full Name" data-ar="الاسم الكامل">Full Name</label>
+                            <input type="text" id="full-name" name="fullName" required>
+                            <span class="error-message" id="name-error"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone" data-en="Phone Number" data-ar="رقم الهاتف">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" placeholder="07XXXXXXXX" required>
+                            <span class="error-message" id="phone-error"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="people" data-en="Number of People" data-ar="عدد الأشخاص">Number of People</label>
+                            <select id="people" name="people" required>
+                                <option value="">--</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                            </select>
+                            <span class="error-message" id="people-error"></span>
+                        </div>
+                        <div class="form-group">
+                            <label data-en="Selected Date" data-ar="التاريخ المحدد">Selected Date</label>
+                            <p class="selected-date" id="selected-date-display"></p>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" id="back-to-calendar" data-en="Back" data-ar="رجوع">Back</button>
+                            <button type="submit" class="btn-primary" data-en="Submit Reservation" data-ar="إرسال الحجز">Submit Reservation</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Step 3: Success Message -->
+                <div id="reservation-step-3" class="reservation-step hidden">
+                    <div class="success-message">
+                        <div class="success-icon">✓</div>
+                        <h3 data-en="Thank you for choosing Halawah!" data-ar="شكراً لاختيارك حلاوة!">Thank you for choosing Halawah!</h3>
+                        <p data-en="We look forward to seeing you." data-ar="نتطلع إلى رؤيتك.">We look forward to seeing you.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section id="reviews" class="section reviews-section">
+        <div class="container">
+            <h2 class="section-title" data-en="What Our Guests Say" data-ar="ماذا يقول ضيوفنا">What Our Guests Say</h2>
+            <div class="reviews-grid" id="reviews-container">
+                <!-- Reviews will be loaded from content.js -->
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="section faq-section">
+        <div class="container">
+            <h2 class="section-title" data-en="Frequently Asked Questions" data-ar="الأسئلة الشائعة">Frequently Asked Questions</h2>
+            <div class="faq-container" id="faq-container">
+                <!-- FAQ items will be loaded from content.js -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section id="menu" class="section menu-section">
+        <div class="container">
+            <h2 class="section-title" data-en="Our Menu" data-ar="قائمتنا">Our Menu</h2>
+            <p class="menu-description" data-en="Experience our delicious Middle Eastern and International cuisine" data-ar="استمتع بمأكولاتنا الشرق أوسطية والدولية اللذيذة">Experience our delicious Middle Eastern and International cuisine</p>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section contact-section">
+        <div class="container">
+            <h2 class="section-title" data-en="Contact Us" data-ar="اتصل بنا">Contact Us</h2>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <strong data-en="Phone" data-ar="الهاتف">Phone:</strong>
+                    <a href="tel:0787426310">0787426310</a>
+                </div>
+                <div class="contact-item">
+                    <strong data-en="Location" data-ar="الموقع">Location:</strong>
+                    <span data-en="Khalda, Amman" data-ar="خلدا، عمان">Khalda, Amman</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3 data-en="Halawah" data-ar="حلاوة">Halawah</h3>
+                    <p data-en="Experience the fusion of local & international flavors" data-ar="اختبر اندماج النكهات المحلية والدولية">Experience the fusion of local & international flavors</p>
+                </div>
+                <div class="footer-section">
+                    <h4 data-en="Contact" data-ar="اتصل بنا">Contact</h4>
+                    <p>0787426310</p>
+                </div>
+                <div class="footer-section">
+                    <h4 data-en="Follow Us" data-ar="تابعنا">Follow Us</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-link" aria-label="Facebook" title="Facebook">📘</a>
+                        <a href="#" class="social-link" aria-label="Instagram" title="Instagram">📷</a>
+                        <a href="#" class="social-link" aria-label="WhatsApp" title="WhatsApp">💬</a>
+                        <a href="#" class="social-link" aria-label="X (Twitter)" title="X">🐦</a>
+                    </div>
+                    <button class="copy-link-btn" id="copy-link-btn" data-en="Copy Link" data-ar="نسخ الرابط">Copy Link</button>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Halawah. <span data-en="All rights reserved." data-ar="جميع الحقوق محفوظة.">All rights reserved.</span></p>
+                <div class="footer-policies">
+                    <a href="#" data-en="Privacy Policy" data-ar="سياسة الخصوصية">Privacy Policy</a>
+                    <a href="#" data-en="Terms of Service" data-ar="شروط الخدمة">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="content.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

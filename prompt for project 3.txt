@@ -1,0 +1,77 @@
+I want a prompt to cursor to build a website (using one HTML, one CSS & two JS(one for the content & one for script)) for a restaurant reservation (landing page)
+
+the name of the restaurant is (halawah)(حلاوة)
+
+in the header [logo, (dropdown to select the language[Arabic, English])thing like toggle for [light/dark/grey] mode, home, about us...
+
+
+
+in the hero section I want to put a video(auto play, no sound, no control from the visitor) & some sentences
+
+
+
+then in the content section 
+
+
+
+for reservation
+
+CTA to see a calendar to choose the date
+
+2 select the date
+
+3 then show a form to fill it (the form should be validation)
+
+you should fill:
+
+1 your full name
+
+2 your phone number
+
+3 number of people (dropdown to choose the number)
+
+after filling the form (thanking message for choosing us)
+
+
+
+
+
+
+
+
+
+
+
+reviews[9 reviews is 5 stars,2 reviews 4 stars]
+
+
+
+FAQ hide by default 
+
+
+
+
+
+in the footer[copyrights, policies, support number(0787426310), thing to share the page or the event(share to social media like (Facebook, Instagram, WhatsApp, x, & gave me some suggestion))
+
+
+
+some information about the restaurant
+
+1 located in Khalda (Amman)
+
+2 local(Jordan, middle East) & international food
+
+3 many drinks (soda, fresh, hot, cold, espresso, late & all that at the coffee houses)
+
+4 every thing Halal
+
+5 the lunch at 15:00  duration three hours
+
+6 the dinner at 20:00 duration three hours
+
+7 the dinner & the lunch is open buffet
+
+8 the reservation only on Thursdays, Fridays and Saturdays
+
+9 the reservation start from 1/20/2026
