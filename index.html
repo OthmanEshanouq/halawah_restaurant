@@ -72,12 +72,8 @@
             <h2 class="section-title" data-en="About Halawah" data-ar="عن حلاوة">About Halawah</h2>
             <div class="about-content">
                 <div class="info-card">
-                    <h3 data-en="Location" data-ar="الموقع">Location</h3>
-                    <p data-en="Khalda, Amman" data-ar="خلدا، عمان">Khalda, Amman</p>
-                </div>
-                <div class="info-card">
                     <h3 data-en="Cuisine" data-ar="المطبخ">Cuisine</h3>
-                    <p data-en="Arabian Food, International Food, and a dedicated Dessert Section (100% Halal)" data-ar="طعام عربي، طعام دولي، وقسم حلويات مخصص (حلال 100%)">Arabian Food, International Food, and a dedicated Dessert Section (100% Halal)</p>
+                    <p data-en="Arabian Food, International Food, and a dedicated Dessert Section" data-ar="طعام عربي، طعام دولي، وقسم حلويات مخصص">Arabian Food, International Food, and a dedicated Dessert Section</p>
                 </div>
                 <div class="info-card">
                     <h3 data-en="Drinks" data-ar="المشروبات">Drinks</h3>
@@ -85,10 +81,7 @@
                 </div>
                 <div class="info-card">
                     <h3 data-en="Schedule" data-ar="الجدول">Schedule</h3>
-                    <p>
-                        <span data-en="Lunch: 15:00 - 18:00 (Open Buffet)" data-ar="الغداء: 15:00 - 18:00 (بوفيه مفتوح)">Lunch: 15:00 - 18:00 (Open Buffet)</span><br>
-                        <span data-en="Dinner: 20:00 - 23:00 (Open Buffet)" data-ar="العشاء: 20:00 - 23:00 (بوفيه مفتوح)">Dinner: 20:00 - 23:00 (Open Buffet)</span>
-                    </p>
+                    <p data-en="Opening Hours: 12:00 PM - 1:00 AM" data-ar="ساعات العمل: 12:00 ظهراً - 1:00 صباحاً">Opening Hours: 12:00 PM - 1:00 AM</p>
                 </div>
             </div>
         </div>
@@ -126,19 +119,7 @@
                         </div>
                         <div class="form-group">
                             <label for="people" data-en="Number of People" data-ar="عدد الأشخاص">Number of People</label>
-                            <select id="people" name="people" required>
-                                <option value="">--</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                                <option value="9">9</option>
-                                <option value="10">10</option>
-                            </select>
+                            <input type="number" id="people" name="people" min="1" max="10" required>
                             <span class="error-message" id="people-error"></span>
                         </div>
                         <div class="form-group">
@@ -154,8 +135,8 @@
                             <label data-en="Selected Date" data-ar="التاريخ المحدد">Selected Date</label>
                             <p class="selected-date" id="selected-date-display"></p>
                         </div>
-                        <div class="reservation-info" id="reservation-info">
-                            <p class="reservation-price" data-en="Price: 20 JOD per person" data-ar="السعر: 20 دينار للشخص">Price: 20 JOD per person</p>
+                        <div class="reservation-info hidden" id="reservation-info">
+                            <p class="reservation-price" id="reservation-price-display"></p>
                         </div>
                         <div class="form-actions">
                             <button type="button" class="btn-secondary" id="back-to-calendar" data-en="Back" data-ar="رجوع">Back</button>
@@ -164,12 +145,52 @@
                     </form>
                 </div>
 
-                <!-- Step 3: Success Message -->
+                <!-- Step 3: Success Message & Payment -->
                 <div id="reservation-step-3" class="reservation-step hidden">
                     <div class="success-message">
                         <div class="success-icon">✓</div>
                         <h3 data-en="Thank you for choosing Halawah!" data-ar="شكراً لاختيارك حلاوة!">Thank you for choosing Halawah!</h3>
                         <p data-en="We look forward to seeing you." data-ar="نتطلع إلى رؤيتك.">We look forward to seeing you.</p>
+                    </div>
+                    <div class="payment-options">
+                        <h4 data-en="Choose Payment Method" data-ar="اختر طريقة الدفع">Choose Payment Method</h4>
+                        <div class="payment-buttons">
+                            <button class="payment-btn" data-payment="credit-card" data-en="Credit Card" data-ar="بطاقة ائتمان">Credit Card</button>
+                            <button class="payment-btn" data-payment="cliq" data-en="cliQ" data-ar="كليك">cliQ</button>
+                            <button class="payment-btn" data-payment="arrival" data-en="Pay When Arriving" data-ar="الدفع عند الوصول">Pay When Arriving</button>
+                        </div>
+                    </div>
+                    <!-- Credit Card Form -->
+                    <div id="credit-card-form" class="credit-card-form hidden">
+                        <h4 data-en="Credit Card Information" data-ar="معلومات البطاقة الائتمانية">Credit Card Information</h4>
+                        <form id="card-form">
+                            <div class="form-group">
+                                <label for="card-number" data-en="Card Number" data-ar="رقم البطاقة">Card Number</label>
+                                <input type="text" id="card-number" name="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" required>
+                                <span class="error-message" id="card-number-error"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="card-name" data-en="Cardholder Name" data-ar="اسم حامل البطاقة">Cardholder Name</label>
+                                <input type="text" id="card-name" name="cardName" required>
+                                <span class="error-message" id="card-name-error"></span>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="card-expiry" data-en="Expiry Date" data-ar="تاريخ الانتهاء">Expiry Date</label>
+                                    <input type="text" id="card-expiry" name="cardExpiry" placeholder="MM/YY" maxlength="5" required>
+                                    <span class="error-message" id="card-expiry-error"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="card-cvv" data-en="CVV" data-ar="CVV">CVV</label>
+                                    <input type="text" id="card-cvv" name="cardCvv" placeholder="123" maxlength="3" required>
+                                    <span class="error-message" id="card-cvv-error"></span>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="btn-secondary" id="cancel-card" data-en="Cancel" data-ar="إلغاء">Cancel</button>
+                                <button type="submit" class="btn-primary" data-en="Pay Now" data-ar="ادفع الآن">Pay Now</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -267,7 +288,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2024 Halawah. <span data-en="All rights reserved." data-ar="جميع الحقوق محفوظة.">All rights reserved.</span></p>
+                <p>&copy; 2026 Halawah. <span data-en="All rights reserved." data-ar="جميع الحقوق محفوظة.">All rights reserved.</span></p>
                 <div class="footer-policies">
                     <a href="#" data-en="Privacy Policy" data-ar="سياسة الخصوصية">Privacy Policy</a>
                     <a href="#" data-en="Terms of Service" data-ar="شروط الخدمة">Terms of Service</a>

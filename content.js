@@ -124,11 +124,11 @@ const contentData = {
     faq: [
         {
             question: "What are your operating hours?",
-            answer: "We are open for lunch from 15:00 to 18:00 and for dinner from 20:00 to 23:00. Both lunch and dinner are served as open buffets."
+            answer: "We are open from 12:00 PM to 1:00 AM."
         },
         {
             question: "Do you accept reservations?",
-            answer: "Yes, we accept reservations for Thursdays, Fridays, and Saturdays. You can make a reservation through our website or by calling us at 0787426310."
+            answer: "Yes, we accept reservations. On Thursdays, Fridays, and Saturdays we only accept reservations. You can make a reservation through our website or by calling us at 0787426310."
         },
         {
             question: "Is the food halal?",
@@ -144,7 +144,7 @@ const contentData = {
         },
         {
             question: "Is parking available?",
-            answer: "Yes, we have parking available near the restaurant. Please contact us for more details about parking locations."
+            answer: "Yes, we have parking available near the restaurant and we have a free valet. Please contact us for more details about parking locations."
         },
         {
             question: "Can I host a private event?",
@@ -152,7 +152,7 @@ const contentData = {
         },
         {
             question: "Do you offer takeout or delivery?",
-            answer: "Currently, we focus on dine-in service with our open buffet. Please contact us to inquire about special arrangements for takeout."
+            answer: "Currently, we focus on dine-in service with our open buffet. Please contact us to inquire about special arrangements for takeout, but we are ready to any event."
         }
     ],
 
@@ -160,11 +160,11 @@ const contentData = {
     faqAr: [
         {
             question: "ما هي ساعات العمل؟",
-            answer: "نحن مفتوحون للغداء من 15:00 إلى 18:00 وللعشاء من 20:00 إلى 23:00. يتم تقديم الغداء والعشاء كبوفيه مفتوح."
+            answer: "نحن مفتوحون من 12:00 ظهراً إلى 1:00 صباحاً."
         },
         {
             question: "هل تقبلون الحجوزات؟",
-            answer: "نعم، نقبل الحجوزات للخميس والجمعة والسبت. يمكنك إجراء حجز من خلال موقعنا الإلكتروني أو بالاتصال بنا على 0787426310."
+            answer: "نعم، نقبل الحجوزات. في الخميس والجمعة والسبت نقبل الحجوزات فقط. يمكنك إجراء حجز من خلال موقعنا الإلكتروني أو بالاتصال بنا على 0787426310."
         },
         {
             question: "هل الطعام حلال؟",
@@ -180,7 +180,7 @@ const contentData = {
         },
         {
             question: "هل يوجد موقف سيارات؟",
-            answer: "نعم، لدينا موقف سيارات متاح بالقرب من المطعم. يرجى الاتصال بنا لمزيد من التفاصيل حول مواقع مواقف السيارات."
+            answer: "نعم، لدينا موقف سيارات متاح بالقرب من المطعم ولدينا خدمة صف سيارات مجانية. يرجى الاتصال بنا لمزيد من التفاصيل حول مواقع مواقف السيارات."
         },
         {
             question: "هل يمكنني استضافة حدث خاص؟",
@@ -188,7 +188,7 @@ const contentData = {
         },
         {
             question: "هل تقدمون خدمة الطلبات الخارجية أو التوصيل؟",
-            answer: "حالياً، نركز على خدمة تناول الطعام في المطعم مع بوفيهنا المفتوح. يرجى الاتصال بنا للاستفسار عن الترتيبات الخاصة للطلبات الخارجية."
+            answer: "حالياً، نركز على خدمة تناول الطعام في المطعم مع بوفيهنا المفتوح. يرجى الاتصال بنا للاستفسار عن الترتيبات الخاصة للطلبات الخارجية، لكننا مستعدون لأي حدث."
         }
     ],
 

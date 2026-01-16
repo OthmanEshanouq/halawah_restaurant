@@ -591,17 +591,17 @@ body[dir="rtl"] .language-select {
 
 .scarcity-badge {
     position: absolute;
-    top: 2px;
-    right: 2px;
-    background-color: #e74c3c;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(231, 76, 60, 0.9);
     color: white;
-    padding: 0.15rem 0.25rem;
-    border-radius: 6px;
-    font-size: 0.55rem;
+    border: 2px solid var(--border);
+    border-radius: 5px;
+    font-size: 0.7rem;
     font-weight: 700;
-    line-height: 1.1;
-    width: auto;
-    max-width: 40px;
+    line-height: 1.2;
     text-align: center;
     animation: pulse 2s infinite;
     z-index: 10;
@@ -609,8 +609,8 @@ body[dir="rtl"] .language-select {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 28px;
     white-space: normal;
+    padding: 0.2rem;
 }
 
 @keyframes pulse {
@@ -769,6 +769,69 @@ body[dir="rtl"] .language-select {
 .success-message p {
     color: var(--text-secondary);
     font-size: 1.2rem;
+}
+
+.payment-options {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.payment-options h4 {
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+}
+
+.payment-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.payment-btn {
+    padding: 1rem 2rem;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 2px solid var(--border);
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.payment-btn:hover {
+    background-color: var(--accent);
+    color: white;
+    border-color: var(--accent);
+    transform: translateY(-2px);
+}
+
+.credit-card-form {
+    margin-top: 2rem;
+    background-color: var(--bg-secondary);
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px var(--shadow);
+}
+
+.credit-card-form h4 {
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    font-size: 1.3rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+@media (max-width: 480px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* ============================================

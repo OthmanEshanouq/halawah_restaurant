@@ -213,6 +213,78 @@ function initializeReservation() {
     if (reservationInfo) {
         reservationInfo.classList.add('hidden');
     }
+    
+    // Dynamic price calculation
+    const peopleInput = document.getElementById('people');
+    if (peopleInput) {
+        peopleInput.addEventListener('input', function() {
+            const peopleCount = parseInt(this.value);
+            if (peopleCount > 0 && peopleCount <= 10) {
+                const totalPrice = peopleCount * 20;
+                const priceDisplay = document.getElementById('reservation-price-display');
+                if (priceDisplay) {
+                    priceDisplay.textContent = currentLanguage === 'ar' 
+                        ? `السعر الإجمالي: ${totalPrice} دينار`
+                        : `Total Price: ${totalPrice} JOD`;
+                }
+                reservationInfo.classList.remove('hidden');
+            } else if (peopleCount === 0 || !peopleCount) {
+                reservationInfo.classList.add('hidden');
+            }
+        });
+    }
+    
+    // Payment options
+    const paymentButtons = document.querySelectorAll('.payment-btn');
+    paymentButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const paymentMethod = this.getAttribute('data-payment');
+            handlePaymentSelection(paymentMethod);
+        });
+    });
+    
+    // Credit card form
+    const cardForm = document.getElementById('card-form');
+    const cancelCardBtn = document.getElementById('cancel-card');
+    
+    if (cardForm) {
+        cardForm.addEventListener('submit', handleCardSubmit);
+    }
+    
+    if (cancelCardBtn) {
+        cancelCardBtn.addEventListener('click', function() {
+            document.getElementById('credit-card-form').classList.add('hidden');
+        });
+    }
+    
+    // Format card inputs
+    const cardNumber = document.getElementById('card-number');
+    const cardExpiry = document.getElementById('card-expiry');
+    const cardCvv = document.getElementById('card-cvv');
+    
+    if (cardNumber) {
+        cardNumber.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\s/g, '');
+            let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+            e.target.value = formattedValue;
+        });
+    }
+    
+    if (cardExpiry) {
+        cardExpiry.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length >= 2) {
+                value = value.substring(0, 2) + '/' + value.substring(2, 4);
+            }
+            e.target.value = value;
+        });
+    }
+    
+    if (cardCvv) {
+        cardCvv.addEventListener('input', function(e) {
+            e.target.value = e.target.value.replace(/\D/g, '');
+        });
+    }
 }
 
 function renderCalendar() {
@@ -388,12 +460,8 @@ function handleReservationSubmit(e) {
     }
     
     if (isValid) {
-        // Show success message
+        // Show success message and payment options
         showReservationStep(3);
-        
-        // Reset form
-        document.getElementById('reservation-form').reset();
-        selectedDate = null;
         
         // Log reservation (in real app, send to server)
         console.log('Reservation submitted:', {
@@ -404,6 +472,74 @@ function handleReservationSubmit(e) {
             date: selectedDate
         });
     }
+}
+
+function handlePaymentSelection(paymentMethod) {
+    if (paymentMethod === 'credit-card') {
+        // Show credit card form
+        document.getElementById('credit-card-form').classList.remove('hidden');
+    } else if (paymentMethod === 'cliq') {
+        // Handle cliQ payment (in real app, redirect to payment gateway)
+        alert(currentLanguage === 'ar' ? 'سيتم توجيهك إلى صفحة الدفع عبر cliQ' : 'You will be redirected to cliQ payment page');
+        // Reset form after payment
+        resetReservationForm();
+    } else if (paymentMethod === 'arrival') {
+        // Pay when arriving
+        alert(currentLanguage === 'ar' ? 'سيتم الدفع عند الوصول. شكراً لك!' : 'Payment will be made upon arrival. Thank you!');
+        resetReservationForm();
+    }
+}
+
+function handleCardSubmit(e) {
+    e.preventDefault();
+    
+    const cardNumber = document.getElementById('card-number').value.replace(/\s/g, '');
+    const cardName = document.getElementById('card-name').value.trim();
+    const cardExpiry = document.getElementById('card-expiry').value;
+    const cardCvv = document.getElementById('card-cvv').value;
+    
+    // Clear previous errors
+    clearErrors();
+    
+    let isValid = true;
+    
+    if (!cardNumber || cardNumber.length < 16) {
+        showError('card-number-error', currentLanguage === 'ar' ? 'رقم البطاقة غير صحيح' : 'Invalid card number');
+        isValid = false;
+    }
+    
+    if (!cardName) {
+        showError('card-name-error', currentLanguage === 'ar' ? 'اسم حامل البطاقة مطلوب' : 'Cardholder name is required');
+        isValid = false;
+    }
+    
+    if (!cardExpiry || !/^\d{2}\/\d{2}$/.test(cardExpiry)) {
+        showError('card-expiry-error', currentLanguage === 'ar' ? 'تاريخ الانتهاء غير صحيح' : 'Invalid expiry date');
+        isValid = false;
+    }
+    
+    if (!cardCvv || cardCvv.length !== 3) {
+        showError('card-cvv-error', currentLanguage === 'ar' ? 'CVV غير صحيح' : 'Invalid CVV');
+        isValid = false;
+    }
+    
+    if (isValid) {
+        // In real app, process payment
+        alert(currentLanguage === 'ar' ? 'تم الدفع بنجاح! شكراً لك!' : 'Payment successful! Thank you!');
+        resetReservationForm();
+    }
+}
+
+function resetReservationForm() {
+    document.getElementById('reservation-form').reset();
+    document.getElementById('credit-card-form').classList.add('hidden');
+    selectedDate = null;
+    const reservationInfo = document.getElementById('reservation-info');
+    if (reservationInfo) {
+        reservationInfo.classList.add('hidden');
+    }
+    showReservationStep(1);
+    renderCalendar();
 }
 
 function validateFullName(name) {
@@ -502,11 +638,23 @@ function scrollCarousel(direction) {
     
     // Get the width of the carousel container
     const containerWidth = carousel.offsetWidth;
+    const currentScroll = carousel.scrollLeft;
+    const maxScroll = carousel.scrollWidth - carousel.offsetWidth;
     
     if (direction === 'next') {
-        carousel.scrollBy({ left: containerWidth, behavior: 'smooth' });
+        // If at the end, scroll to beginning (circular)
+        if (currentScroll >= maxScroll - 10) {
+            carousel.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+            carousel.scrollBy({ left: containerWidth, behavior: 'smooth' });
+        }
     } else {
-        carousel.scrollBy({ left: -containerWidth, behavior: 'smooth' });
+        // If at the beginning, scroll to end (circular)
+        if (currentScroll <= 10) {
+            carousel.scrollTo({ left: maxScroll, behavior: 'smooth' });
+        } else {
+            carousel.scrollBy({ left: -containerWidth, behavior: 'smooth' });
+        }
     }
 }
 
