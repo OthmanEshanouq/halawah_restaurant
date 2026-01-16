@@ -221,5 +221,45 @@ const contentData = {
                 ar: "العشاء: 20:00 - 23:00 (بوفيه مفتوح)"
             }
         }
+    },
+
+    // Payment Method Translations
+    payment: {
+        method: {
+            en: "Payment Method",
+            ar: "طريقة الدفع"
+        },
+        cash: {
+            en: "Cash at Restaurant",
+            ar: "نقداً في المطعم"
+        },
+        creditCard: {
+            en: "Credit Card",
+            ar: "بطاقة ائتمان"
+        },
+        cardNumber: {
+            en: "Card Number",
+            ar: "رقم البطاقة"
+        },
+        expiryDate: {
+            en: "Expiry Date (MM/YY)",
+            ar: "تاريخ الانتهاء (شهر/سنة)"
+        },
+        cardholderName: {
+            en: "Cardholder Name",
+            ar: "اسم حامل البطاقة"
+        },
+        cvv: {
+            en: "CVV",
+            ar: "CVV"
+        },
+        thankYouCash: {
+            en: "Your reservation is confirmed. Payment will be handled at the restaurant.",
+            ar: "تم تأكيد حجزك. سيتم الدفع في المطعم."
+        },
+        thankYouCard: {
+            en: "Your reservation is confirmed. Please have your card ready.",
+            ar: "تم تأكيد حجزك. يرجى إحضار بطاقتك."
+        }
     }
 };

@@ -105,19 +105,19 @@ body[dir="rtl"] {
    ============================================ */
 
 .header {
-    background-color: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    background-color: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     box-shadow: 0 2px 10px var(--shadow);
     position: sticky;
     top: 0;
     z-index: 1000;
     transition: all 0.3s ease;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .header.scrolled {
-    background-color: rgba(255, 255, 255, 0.15);
+    background-color: rgba(255, 255, 255, 0.35);
     box-shadow: 0 4px 20px var(--shadow);
 }
 
@@ -145,6 +145,14 @@ body[dir="rtl"] {
     display: flex;
     align-items: center;
     gap: 2rem;
+    flex-shrink: 0;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    flex-shrink: 0;
 }
 
 .logo {
@@ -166,6 +174,7 @@ body[dir="rtl"] {
     flex-wrap: wrap;
     margin: 0;
     padding: 0;
+    align-items: center;
 }
 
 .nav-links-left a,
@@ -176,6 +185,7 @@ body[dir="rtl"] {
     transition: color 0.3s ease;
     position: relative;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    white-space: nowrap;
 }
 
 :root[data-theme="dark"] .nav-links-left a,
@@ -183,7 +193,8 @@ body[dir="rtl"] {
 :root[data-theme="grey"] .nav-links-left a,
 :root[data-theme="grey"] .nav-links-right a {
     color: #ffffff;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7), 0 0 8px rgba(0, 0, 0, 0.5);
+    font-weight: 700;
 }
 
 .nav-links-left a:hover,
@@ -219,6 +230,18 @@ body[dir="rtl"] .nav-links-right a::after {
     display: flex;
     align-items: center;
     gap: 1rem;
+    margin-left: 1rem;
+    padding-left: 1rem;
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+body[dir="rtl"] .header-controls {
+    margin-left: 0;
+    margin-right: 1rem;
+    padding-left: 0;
+    padding-right: 1rem;
+    border-left: none;
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .language-dropdown {
@@ -595,7 +618,7 @@ body[dir="rtl"] .language-select {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(231, 76, 60, 0.9);
+    background-color: rgba(231, 76, 60, 0.5);
     color: white;
     border: 2px solid var(--border);
     border-radius: 5px;
@@ -681,6 +704,111 @@ body[dir="rtl"] .language-select {
 .form-group select:focus {
     outline: none;
     border-color: var(--accent);
+}
+
+.form-group input.valid {
+    border-color: #27ae60;
+}
+
+.form-group input.invalid {
+    border-color: #e74c3c;
+}
+
+/* Payment Method Radio Buttons */
+.payment-method-options {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    padding: 0.75rem 1.5rem;
+    border: 2px solid var(--border);
+    border-radius: 5px;
+    background-color: var(--bg-secondary);
+    transition: all 0.3s ease;
+    flex: 1;
+    min-width: 150px;
+    justify-content: center;
+}
+
+.radio-option:hover {
+    border-color: var(--accent);
+    background-color: var(--bg-primary);
+}
+
+.radio-option input[type="radio"] {
+    width: auto;
+    margin: 0;
+    cursor: pointer;
+    accent-color: var(--accent);
+}
+
+.radio-option input[type="radio"]:checked + span {
+    color: var(--accent);
+    font-weight: 700;
+}
+
+.radio-option:has(input[type="radio"]:checked) {
+    border-color: var(--accent);
+    background-color: rgba(212, 165, 116, 0.1);
+}
+
+/* Credit Card Form Container */
+.credit-card-form-container {
+    display: none;
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    background-color: var(--bg-secondary);
+    border-radius: 10px;
+    border: 2px solid var(--border);
+    animation: slideDown 0.3s ease;
+}
+
+.credit-card-form-container.show {
+    display: block;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card-icons {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    justify-content: flex-end;
+}
+
+.card-icon {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.card-icon.visa {
+    background: linear-gradient(135deg, #1a1f71 0%, #192f6d 100%);
+    color: white;
+}
+
+.card-icon.mastercard {
+    background: linear-gradient(135deg, #eb001b 0%, #f79e1b 100%);
+    color: white;
 }
 
 .error-message {
@@ -774,6 +902,8 @@ body[dir="rtl"] .language-select {
 .payment-options {
     margin-top: 2rem;
     text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
 }
 
 .payment-options h4 {
@@ -952,6 +1082,7 @@ body[dir="rtl"] .language-select {
     margin: 0;
     user-select: none;
     transition: color 0.3s ease;
+    cursor: pointer;
 }
 
 .faq-main-title:hover {
@@ -1185,14 +1316,28 @@ body[dir="rtl"] .faq-question {
 }
 
 .social-link {
-    font-size: 1.5rem;
     text-decoration: none;
-    transition: transform 0.3s ease;
-    display: inline-block;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    line-height: 1;
+    color: var(--text-secondary);
+    border-radius: 50%;
+    background-color: var(--bg-primary);
+}
+
+.social-link svg {
+    width: 24px;
+    height: 24px;
 }
 
 .social-link:hover {
     transform: scale(1.2);
+    opacity: 0.8;
+    color: var(--accent);
 }
 
 .copy-link-btn {
@@ -1231,14 +1376,15 @@ body[dir="rtl"] .faq-question {
     gap: 1.5rem;
 }
 
-.footer-policies a {
+.footer-policies span {
     color: var(--text-secondary);
-    text-decoration: none;
-    transition: color 0.3s ease;
+    cursor: default;
 }
 
-.footer-policies a:hover {
-    color: var(--accent);
+.footer-policies span:not(:last-child)::after {
+    content: ' | ';
+    margin: 0 0.5rem;
+    color: var(--text-secondary);
 }
 
 /* ============================================
@@ -1250,8 +1396,15 @@ body[dir="rtl"] .faq-question {
         position: relative;
     }
 
-    .nav-links-left,
-    .nav-links-right {
+    .nav-left {
+        gap: 1rem;
+    }
+
+    .nav-left .nav-links-left {
+        display: none;
+    }
+
+    .nav-right .nav-links-right {
         display: none;
     }
 
@@ -1259,9 +1412,23 @@ body[dir="rtl"] .faq-question {
         display: flex;
     }
 
-    .header-controls {
-        margin-left: auto;
+    .nav-right {
+        gap: 1rem;
     }
+
+    .header-controls {
+        margin-left: 0.5rem;
+        padding-left: 0.5rem;
+        gap: 0.5rem;
+    }
+
+    body[dir="rtl"] .header-controls {
+        margin-left: 0;
+        margin-right: 0.5rem;
+        padding-left: 0;
+        padding-right: 0.5rem;
+    }
+}
 
     .location-content {
         grid-template-columns: 1fr;
@@ -1345,6 +1512,18 @@ body[dir="rtl"] .faq-question {
    RTL Specific Styles
    ============================================ */
 
+
+body[dir="rtl"] .nav {
+    flex-direction: row-reverse;
+}
+
+body[dir="rtl"] .nav-left {
+    flex-direction: row-reverse;
+}
+
+body[dir="rtl"] .nav-right {
+    flex-direction: row-reverse;
+}
 
 body[dir="rtl"] .calendar-header {
     flex-direction: row-reverse;

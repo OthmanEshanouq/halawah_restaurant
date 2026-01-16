@@ -163,6 +163,15 @@ function applyLanguage(lang) {
             dinnerOption.textContent = lang === 'ar' ? dinnerOption.getAttribute('data-ar') : dinnerOption.getAttribute('data-en');
         }
     }
+    
+    // Update payment method placeholders
+    const cardholderName = document.getElementById('cardholder-name');
+    if (cardholderName) {
+        const placeholder = lang === 'ar' ? cardholderName.getAttribute('data-ar-placeholder') : cardholderName.getAttribute('data-en-placeholder');
+        if (placeholder) {
+            cardholderName.placeholder = placeholder;
+        }
+    }
 }
 
 // ============================================
@@ -234,57 +243,119 @@ function initializeReservation() {
         });
     }
     
-    // Payment options
-    const paymentButtons = document.querySelectorAll('.payment-btn');
-    paymentButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const paymentMethod = this.getAttribute('data-payment');
-            handlePaymentSelection(paymentMethod);
-        });
-    });
+    // Payment Method Toggle
+    const paymentCash = document.getElementById('payment-cash');
+    const paymentCreditCard = document.getElementById('payment-credit-card');
+    const creditCardFormContainer = document.getElementById('credit-card-form-container');
     
-    // Credit card form
-    const cardForm = document.getElementById('card-form');
-    const cancelCardBtn = document.getElementById('cancel-card');
-    
-    if (cardForm) {
-        cardForm.addEventListener('submit', handleCardSubmit);
+    function toggleCreditCardForm() {
+        if (paymentCreditCard && paymentCreditCard.checked) {
+            if (creditCardFormContainer) {
+                creditCardFormContainer.classList.add('show');
+            }
+        } else {
+            if (creditCardFormContainer) {
+                creditCardFormContainer.classList.remove('show');
+            }
+        }
     }
     
-    if (cancelCardBtn) {
-        cancelCardBtn.addEventListener('click', function() {
-            document.getElementById('credit-card-form').classList.add('hidden');
-        });
+    if (paymentCash) {
+        paymentCash.addEventListener('change', toggleCreditCardForm);
     }
     
-    // Format card inputs
-    const cardNumber = document.getElementById('card-number');
-    const cardExpiry = document.getElementById('card-expiry');
-    const cardCvv = document.getElementById('card-cvv');
+    if (paymentCreditCard) {
+        paymentCreditCard.addEventListener('change', toggleCreditCardForm);
+    }
     
-    if (cardNumber) {
-        cardNumber.addEventListener('input', function(e) {
+    // Format card number input
+    const cardNumberForm = document.getElementById('card-number-form');
+    if (cardNumberForm) {
+        cardNumberForm.addEventListener('input', function(e) {
             let value = e.target.value.replace(/\s/g, '');
+            value = value.replace(/\D/g, '');
             let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+            if (formattedValue.length > 19) formattedValue = formattedValue.substring(0, 19);
             e.target.value = formattedValue;
+            
+            // Validate and update border color
+            if (value.length === 16) {
+                e.target.classList.remove('invalid');
+                e.target.classList.add('valid');
+            } else if (value.length > 0) {
+                e.target.classList.remove('valid');
+                e.target.classList.add('invalid');
+            } else {
+                e.target.classList.remove('valid', 'invalid');
+            }
         });
     }
     
-    if (cardExpiry) {
-        cardExpiry.addEventListener('input', function(e) {
+    // Format expiry date input
+    const cardExpiryForm = document.getElementById('card-expiry-form');
+    if (cardExpiryForm) {
+        cardExpiryForm.addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
             if (value.length >= 2) {
                 value = value.substring(0, 2) + '/' + value.substring(2, 4);
             }
             e.target.value = value;
+            
+            // Validate and update border color
+            if (/^\d{2}\/\d{2}$/.test(value)) {
+                const [month, year] = value.split('/');
+                const monthNum = parseInt(month);
+                if (monthNum >= 1 && monthNum <= 12) {
+                    e.target.classList.remove('invalid');
+                    e.target.classList.add('valid');
+                } else {
+                    e.target.classList.remove('valid');
+                    e.target.classList.add('invalid');
+                }
+            } else if (value.length > 0) {
+                e.target.classList.remove('valid');
+                e.target.classList.add('invalid');
+            } else {
+                e.target.classList.remove('valid', 'invalid');
+            }
         });
     }
     
-    if (cardCvv) {
-        cardCvv.addEventListener('input', function(e) {
+    // Format CVV input
+    const cardCvvForm = document.getElementById('card-cvv-form');
+    if (cardCvvForm) {
+        cardCvvForm.addEventListener('input', function(e) {
             e.target.value = e.target.value.replace(/\D/g, '');
+            
+            // Validate and update border color
+            if (e.target.value.length === 3) {
+                e.target.classList.remove('invalid');
+                e.target.classList.add('valid');
+            } else if (e.target.value.length > 0) {
+                e.target.classList.remove('valid');
+                e.target.classList.add('invalid');
+            } else {
+                e.target.classList.remove('valid', 'invalid');
+            }
         });
     }
+    
+    // Validate cardholder name
+    const cardholderName = document.getElementById('cardholder-name');
+    if (cardholderName) {
+        cardholderName.addEventListener('input', function(e) {
+            if (e.target.value.trim().length >= 3) {
+                e.target.classList.remove('invalid');
+                e.target.classList.add('valid');
+            } else if (e.target.value.length > 0) {
+                e.target.classList.remove('valid');
+                e.target.classList.add('invalid');
+            } else {
+                e.target.classList.remove('valid', 'invalid');
+            }
+        });
+    }
+    
 }
 
 function renderCalendar() {
@@ -436,7 +507,7 @@ function handleReservationSubmit(e) {
         showError('name-error', currentLanguage === 'ar' ? 'الاسم الكامل مطلوب' : 'Full name is required');
         isValid = false;
     } else if (!validateFullName(fullName)) {
-        showError('name-error', currentLanguage === 'ar' ? 'يرجى إدخال الاسم الكامل (ثلاثة أسماء على الأقل)' : 'Please enter full name (at least 3 words)');
+        showError('name-error', currentLanguage === 'ar' ? 'يرجى إدخال الاسم الكامل (اسمين على الأقل)' : 'Please enter full name (at least 2 words)');
         isValid = false;
     }
     
@@ -459,9 +530,48 @@ function handleReservationSubmit(e) {
         isValid = false;
     }
     
+    // Check payment method
+    const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value;
+    
+    // If credit card is selected, validate card fields
+    if (paymentMethod === 'credit-card') {
+        const cardholderName = document.getElementById('cardholder-name').value.trim();
+        const cardNumber = document.getElementById('card-number-form').value.replace(/\s/g, '');
+        const cardExpiry = document.getElementById('card-expiry-form').value;
+        const cardCvv = document.getElementById('card-cvv-form').value;
+        
+        if (!cardholderName || cardholderName.length < 3) {
+            showError('cardholder-name-error', currentLanguage === 'ar' ? 'اسم حامل البطاقة مطلوب (3 أحرف على الأقل)' : 'Cardholder name is required (at least 3 characters)');
+            isValid = false;
+        }
+        
+        if (!cardNumber || cardNumber.length !== 16) {
+            showError('card-number-form-error', currentLanguage === 'ar' ? 'رقم البطاقة يجب أن يكون 16 رقم' : 'Card number must be 16 digits');
+            isValid = false;
+        }
+        
+        if (!cardExpiry || !/^\d{2}\/\d{2}$/.test(cardExpiry)) {
+            showError('card-expiry-form-error', currentLanguage === 'ar' ? 'تاريخ الانتهاء غير صحيح (MM/YY)' : 'Invalid expiry date (MM/YY)');
+            isValid = false;
+        } else {
+            const [month, year] = cardExpiry.split('/');
+            const monthNum = parseInt(month);
+            if (monthNum < 1 || monthNum > 12) {
+                showError('card-expiry-form-error', currentLanguage === 'ar' ? 'الشهر غير صحيح' : 'Invalid month');
+                isValid = false;
+            }
+        }
+        
+        if (!cardCvv || cardCvv.length !== 3) {
+            showError('card-cvv-form-error', currentLanguage === 'ar' ? 'CVV يجب أن يكون 3 أرقام' : 'CVV must be 3 digits');
+            isValid = false;
+        }
+    }
+    
     if (isValid) {
-        // Show success message and payment options
+        // Show success message with payment method info
         showReservationStep(3);
+        updateThankYouMessage(paymentMethod);
         
         // Log reservation (in real app, send to server)
         console.log('Reservation submitted:', {
@@ -469,70 +579,30 @@ function handleReservationSubmit(e) {
             phone: phone,
             people: people,
             mealTime: mealTime,
+            paymentMethod: paymentMethod,
             date: selectedDate
         });
     }
 }
 
-function handlePaymentSelection(paymentMethod) {
-    if (paymentMethod === 'credit-card') {
-        // Show credit card form
-        document.getElementById('credit-card-form').classList.remove('hidden');
-    } else if (paymentMethod === 'cliq') {
-        // Handle cliQ payment (in real app, redirect to payment gateway)
-        alert(currentLanguage === 'ar' ? 'سيتم توجيهك إلى صفحة الدفع عبر cliQ' : 'You will be redirected to cliQ payment page');
-        // Reset form after payment
-        resetReservationForm();
-    } else if (paymentMethod === 'arrival') {
-        // Pay when arriving
-        alert(currentLanguage === 'ar' ? 'سيتم الدفع عند الوصول. شكراً لك!' : 'Payment will be made upon arrival. Thank you!');
-        resetReservationForm();
+function updateThankYouMessage(paymentMethod) {
+    const thankYouMessage = document.getElementById('thank-you-message');
+    if (thankYouMessage && typeof contentData !== 'undefined' && contentData.payment) {
+        if (paymentMethod === 'credit-card') {
+            thankYouMessage.textContent = contentData.payment.thankYouCard[currentLanguage] || contentData.payment.thankYouCard.en;
+        } else {
+            thankYouMessage.textContent = contentData.payment.thankYouCash[currentLanguage] || contentData.payment.thankYouCash.en;
+        }
     }
 }
 
-function handleCardSubmit(e) {
-    e.preventDefault();
-    
-    const cardNumber = document.getElementById('card-number').value.replace(/\s/g, '');
-    const cardName = document.getElementById('card-name').value.trim();
-    const cardExpiry = document.getElementById('card-expiry').value;
-    const cardCvv = document.getElementById('card-cvv').value;
-    
-    // Clear previous errors
-    clearErrors();
-    
-    let isValid = true;
-    
-    if (!cardNumber || cardNumber.length < 16) {
-        showError('card-number-error', currentLanguage === 'ar' ? 'رقم البطاقة غير صحيح' : 'Invalid card number');
-        isValid = false;
-    }
-    
-    if (!cardName) {
-        showError('card-name-error', currentLanguage === 'ar' ? 'اسم حامل البطاقة مطلوب' : 'Cardholder name is required');
-        isValid = false;
-    }
-    
-    if (!cardExpiry || !/^\d{2}\/\d{2}$/.test(cardExpiry)) {
-        showError('card-expiry-error', currentLanguage === 'ar' ? 'تاريخ الانتهاء غير صحيح' : 'Invalid expiry date');
-        isValid = false;
-    }
-    
-    if (!cardCvv || cardCvv.length !== 3) {
-        showError('card-cvv-error', currentLanguage === 'ar' ? 'CVV غير صحيح' : 'Invalid CVV');
-        isValid = false;
-    }
-    
-    if (isValid) {
-        // In real app, process payment
-        alert(currentLanguage === 'ar' ? 'تم الدفع بنجاح! شكراً لك!' : 'Payment successful! Thank you!');
-        resetReservationForm();
-    }
-}
 
 function resetReservationForm() {
     document.getElementById('reservation-form').reset();
-    document.getElementById('credit-card-form').classList.add('hidden');
+    const creditCardFormContainer = document.getElementById('credit-card-form-container');
+    if (creditCardFormContainer) {
+        creditCardFormContainer.classList.remove('show');
+    }
     selectedDate = null;
     const reservationInfo = document.getElementById('reservation-info');
     if (reservationInfo) {
@@ -543,9 +613,9 @@ function resetReservationForm() {
 }
 
 function validateFullName(name) {
-    // Full name must have at least 3 words (captures)
+    // Full name must have at least 2 words (captures)
     const nameParts = name.trim().split(/\s+/);
-    return nameParts.length >= 3;
+    return nameParts.length >= 2;
 }
 
 function validateJordanianPhone(phone) {
@@ -672,29 +742,34 @@ function resetCarousel() {
 function loadFAQ() {
     const faqContainer = document.getElementById('faq-container');
     const faqToggleBtn = document.getElementById('faq-toggle-btn');
+    const faqMainTitle = document.getElementById('faq-main-title');
     
     if (!faqContainer || typeof contentData === 'undefined') return;
     
-    // Initialize toggle button click (first toggle - reveal/hide list)
+    // Toggle FAQ function
+    function toggleFAQ() {
+        const isHidden = faqContainer.classList.contains('hidden');
+        if (isHidden) {
+            faqContainer.classList.remove('hidden');
+            if (faqToggleBtn) faqToggleBtn.classList.add('active');
+        } else {
+            faqContainer.classList.add('hidden');
+            if (faqToggleBtn) faqToggleBtn.classList.remove('active');
+            // Close all FAQ items when hiding
+            faqContainer.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+            });
+        }
+    }
+    
+    // Make FAQ title clickable
+    if (faqMainTitle) {
+        faqMainTitle.addEventListener('click', toggleFAQ);
+    }
+    
+    // Initialize toggle button click
     if (faqToggleBtn) {
-        // Remove any existing listeners by cloning
-        const newBtn = faqToggleBtn.cloneNode(true);
-        faqToggleBtn.parentNode.replaceChild(newBtn, faqToggleBtn);
-        
-        newBtn.addEventListener('click', function() {
-            const isHidden = faqContainer.classList.contains('hidden');
-            if (isHidden) {
-                faqContainer.classList.remove('hidden');
-                newBtn.classList.add('active');
-            } else {
-                faqContainer.classList.add('hidden');
-                newBtn.classList.remove('active');
-                // Close all FAQ items when hiding
-                faqContainer.querySelectorAll('.faq-item').forEach(item => {
-                    item.classList.remove('active');
-                });
-            }
-        });
+        faqToggleBtn.addEventListener('click', toggleFAQ);
     }
     
     const faqItems = currentLanguage === 'ar' ? contentData.faqAr : contentData.faq;
