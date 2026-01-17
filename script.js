@@ -31,9 +31,10 @@ function initializeApp() {
     initializeMobileMenu();
     loadReviews();
     loadFAQ();
-    initializeCopyLink();
+    initializeSocialSharing();
     initializeSmoothScroll();
     initializeStickyHeader();
+    initializePoliciesModal();
     
     // Set initial theme and language
     applyTheme(currentTheme);
@@ -86,13 +87,17 @@ function updateThemeIcon() {
         const nextIndex = (currentIndex + 1) % themes.length;
         const nextTheme = themes[nextIndex];
         
-        const icons = {
-            'light': '☀️',
-            'dark': '🌙',
-            'grey': '⚫'
-        };
         // Show NEXT mode icon, not current
-        themeIcon.textContent = icons[nextTheme] || '⚫';
+        if (nextTheme === 'grey') {
+            // Leaf icon for Earth Tones theme
+            themeIcon.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>';
+        } else {
+            const icons = {
+                'light': '☀️',
+                'dark': '🌙'
+            };
+            themeIcon.textContent = icons[nextTheme] || '☀️';
+        }
     }
 }
 
@@ -128,6 +133,11 @@ function switchLanguage(lang) {
     renderCalendar(); // Regenerate calendar with new language
     // Reset carousel position when language changes
     resetCarousel();
+    // Reload policies content if modal is open
+    const policiesModal = document.getElementById('policies-modal');
+    if (policiesModal && policiesModal.classList.contains('active')) {
+        loadPoliciesContent();
+    }
 }
 
 function applyLanguage(lang) {
@@ -809,32 +819,84 @@ function loadFAQ() {
 }
 
 // ============================================
-// Copy Link Functionality
+// Social Sharing Functionality
 // ============================================
 
-function initializeCopyLink() {
-    const copyLinkBtn = document.getElementById('copy-link-btn');
-    if (copyLinkBtn) {
-        copyLinkBtn.addEventListener('click', function() {
+function initializeSocialSharing() {
+    const currentUrl = encodeURIComponent(window.location.href);
+    
+    // Facebook Share
+    const facebookShare = document.getElementById('share-facebook');
+    if (facebookShare) {
+        facebookShare.addEventListener('click', function(e) {
+            e.preventDefault();
+            const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${currentUrl}`;
+            window.open(shareUrl, '_blank', 'width=600,height=400');
+        });
+    }
+    
+    // Instagram Share (Copy to Clipboard)
+    const instagramShare = document.getElementById('share-instagram');
+    if (instagramShare) {
+        instagramShare.addEventListener('click', function(e) {
+            e.preventDefault();
             const url = window.location.href;
-            
-            // Copy to clipboard
             navigator.clipboard.writeText(url).then(() => {
-                // Show feedback
-                const originalText = this.textContent;
-                this.textContent = currentLanguage === 'ar' ? 'تم النسخ!' : 'Copied!';
-                this.style.backgroundColor = '#27ae60';
-                
-                setTimeout(() => {
-                    this.textContent = originalText;
-                    this.style.backgroundColor = '';
-                }, 2000);
+                showToast(currentLanguage === 'ar' ? 'تم نسخ الرابط!' : 'Link Copied!');
             }).catch(err => {
                 console.error('Failed to copy:', err);
-                alert(currentLanguage === 'ar' ? 'فشل النسخ' : 'Failed to copy');
+                showToast(currentLanguage === 'ar' ? 'فشل النسخ' : 'Failed to copy');
             });
         });
     }
+    
+    // WhatsApp Share
+    const whatsappShare = document.getElementById('share-whatsapp');
+    if (whatsappShare) {
+        whatsappShare.addEventListener('click', function(e) {
+            e.preventDefault();
+            const shareUrl = `https://api.whatsapp.com/send?text=${currentUrl}`;
+            window.open(shareUrl, '_blank', 'width=600,height=400');
+        });
+    }
+    
+    // X (Twitter) Share
+    const xShare = document.getElementById('share-x');
+    if (xShare) {
+        xShare.addEventListener('click', function(e) {
+            e.preventDefault();
+            const shareUrl = `https://twitter.com/intent/tweet?url=${currentUrl}`;
+            window.open(shareUrl, '_blank', 'width=600,height=400');
+        });
+    }
+}
+
+// Toast Notification Function
+function showToast(message) {
+    // Remove existing toast if any
+    const existingToast = document.querySelector('.toast-notification');
+    if (existingToast) {
+        existingToast.remove();
+    }
+    
+    // Create toast element
+    const toast = document.createElement('div');
+    toast.className = 'toast-notification';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    // Show toast
+    setTimeout(() => {
+        toast.classList.add('show');
+    }, 10);
+    
+    // Hide and remove toast after 3 seconds
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => {
+            toast.remove();
+        }, 300);
+    }, 3000);
 }
 
 // ============================================
@@ -933,6 +995,107 @@ function loadPreferences() {
     
     if (savedLanguage) {
         currentLanguage = savedLanguage;
+    }
+}
+
+// ============================================
+// Policies Modal Functionality
+// ============================================
+
+function initializePoliciesModal() {
+    const policiesLink = document.getElementById('policies-link');
+    const policiesModal = document.getElementById('policies-modal');
+    const closeBtn = document.getElementById('policies-modal-close');
+    
+    if (policiesLink) {
+        policiesLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            openPoliciesModal();
+        });
+    }
+    
+    if (closeBtn) {
+        closeBtn.addEventListener('click', function() {
+            closePoliciesModal();
+        });
+    }
+    
+    if (policiesModal) {
+        // Close modal when clicking outside
+        policiesModal.addEventListener('click', function(e) {
+            if (e.target === policiesModal) {
+                closePoliciesModal();
+            }
+        });
+        
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && policiesModal.classList.contains('active')) {
+                closePoliciesModal();
+            }
+        });
+    }
+    
+    // Load initial content
+    loadPoliciesContent();
+}
+
+function openPoliciesModal() {
+    const policiesModal = document.getElementById('policies-modal');
+    if (policiesModal) {
+        policiesModal.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        loadPoliciesContent();
+    }
+}
+
+function closePoliciesModal() {
+    const policiesModal = document.getElementById('policies-modal');
+    if (policiesModal) {
+        policiesModal.classList.remove('active');
+        document.body.style.overflow = ''; // Restore scrolling
+    }
+}
+
+function loadPoliciesContent() {
+    const modalBody = document.getElementById('policies-modal-body');
+    if (!modalBody || !contentData || !contentData.policiesText) {
+        return;
+    }
+    
+    const policies = contentData.policiesText[currentLanguage];
+    if (!policies) {
+        return;
+    }
+    
+    // Clear existing content
+    modalBody.innerHTML = '';
+    
+    // Create policy sections
+    const sections = ['reservations', 'buffet', 'payment', 'refunds', 'halal'];
+    
+    sections.forEach(sectionKey => {
+        if (policies[sectionKey]) {
+            const section = document.createElement('div');
+            section.className = 'policy-section';
+            
+            const title = document.createElement('h3');
+            title.textContent = policies[sectionKey].title;
+            
+            const content = document.createElement('p');
+            content.textContent = policies[sectionKey].content;
+            
+            section.appendChild(title);
+            section.appendChild(content);
+            modalBody.appendChild(section);
+        }
+    });
+    
+    // Update modal title
+    const modalTitle = document.getElementById('policies-modal-title');
+    if (modalTitle) {
+        const titleText = currentLanguage === 'ar' ? 'الشروط والسياسات' : 'Terms & Policies';
+        modalTitle.textContent = titleText;
     }
 }
 

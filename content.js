@@ -261,5 +261,53 @@ const contentData = {
             en: "Your reservation is confirmed. Please have your card ready.",
             ar: "تم تأكيد حجزك. يرجى إحضار بطاقتك."
         }
+    },
+    
+    // Policies Content
+    policiesText: {
+        en: {
+            reservations: {
+                title: "Reservations",
+                content: "Reservations are held for 20 minutes. We only accept reservations on Thursdays, Fridays, and Saturdays."
+            },
+            buffet: {
+                title: "Buffet",
+                content: "Each buffet session lasts 3 hours. Lunch is served from 15:00 (3:00 PM) and Dinner from 20:00 (8:00 PM)."
+            },
+            payment: {
+                title: "Payment",
+                content: "The price is 20 JOD per person. All payment transactions are secure and protected."
+            },
+            refunds: {
+                title: "Refunds & Rescheduling",
+                content: "Rescheduling is allowed with advance notice. No direct refunds are provided for no-shows."
+            },
+            halal: {
+                title: "Halal Certification",
+                content: "Everything served at Halawah is 100% Halal certified."
+            }
+        },
+        ar: {
+            reservations: {
+                title: "الحجوزات",
+                content: "يتم الاحتفاظ بالحجوزات لمدة 20 دقيقة. نقبل الحجوزات فقط أيام الخميس والجمعة والسبت."
+            },
+            buffet: {
+                title: "البوفيه",
+                content: "كل جلسة بوفيه تستمر لمدة 3 ساعات. يتم تقديم الغداء من الساعة 15:00 (3:00 مساءً) والعشاء من الساعة 20:00 (8:00 مساءً)."
+            },
+            payment: {
+                title: "الدفع",
+                content: "السعر هو 20 دينار أردني للشخص الواحد. جميع معاملات الدفع آمنة ومحمية."
+            },
+            refunds: {
+                title: "الاسترداد وإعادة الجدولة",
+                content: "يُسمح بإعادة الجدولة مع إشعار مسبق. لا يتم تقديم استرداد مباشر للمتغيبين."
+            },
+            halal: {
+                title: "شهادة الحلال",
+                content: "كل ما يُقدم في حلاوة معتمد 100% حلال."
+            }
+        }
     }
 };
