@@ -23,19 +23,19 @@
     --dark-border: #404040;
     --dark-shadow: rgba(0, 0, 0, 0.5);
     
-    /* Earth Tones Theme (Default) - Rich, Professional Palette */
-    --grey-bg-primary: #FDF5E6;
-    --grey-bg-secondary: #EDC9AF;
+    /* Coffee & Caramel Theme - Cozy, Intimate Palette */
+    --grey-bg-primary: #FAF5F0;
+    --grey-bg-secondary: #FFF8F0;
     --grey-text-primary: #3E2723;
-    --grey-text-secondary: #795548;
-    --grey-accent: #556B2F;
-    --grey-accent-hover: #6B8E23;
-    --grey-cta: #C04000;
-    --grey-cta-hover: #A03500;
-    --grey-border: #D2B48C;
-    --grey-shadow: rgba(62, 39, 35, 0.1);
-    --grey-card-selected: rgba(192, 64, 0, 0.15);
-    --grey-card-unselected: rgba(237, 201, 175, 0.5);
+    --grey-text-secondary: #5D4037;
+    --grey-accent: #8D6E63;
+    --grey-accent-hover: #6D4C41;
+    --grey-cta: #5D4037;
+    --grey-cta-hover: #4E342E;
+    --grey-border: #BCAAA4;
+    --grey-shadow: rgba(61, 39, 35, 0.15);
+    --grey-card-selected: rgba(93, 64, 55, 0.15);
+    --grey-card-unselected: rgba(255, 248, 240, 0.7);
 }
 
 /* Theme Variables - Default to Grey */
@@ -92,7 +92,7 @@ body {
     font-family: 'Montserrat', 'Cairo', sans-serif;
     background-color: var(--bg-primary);
     color: var(--text-primary);
-    line-height: 1.6;
+    line-height: 1.7;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
@@ -137,15 +137,15 @@ body[dir="rtl"] {
 }
 
 :root[data-theme="grey"] .header {
-    background-color: rgba(237, 201, 175, 0.7);
+    background-color: rgba(255, 248, 240, 0.7);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    border-bottom: 1px solid rgba(62, 39, 35, 0.1);
+    border-bottom: 1px solid rgba(61, 39, 35, 0.1);
 }
 
 :root[data-theme="grey"] .header.scrolled {
-    background-color: rgba(237, 201, 175, 0.75);
-    border-bottom: 1px solid rgba(62, 39, 35, 0.15);
+    background-color: rgba(255, 248, 240, 0.75);
+    border-bottom: 1px solid rgba(61, 39, 35, 0.15);
 }
 
 .nav {
@@ -469,6 +469,7 @@ body[dir="rtl"] .language-select {
     font-size: 3rem;
     font-weight: 700;
     margin-bottom: 2rem;
+    font-family: 'Playfair Display', serif;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     animation: fadeInUp 1s ease;
 }
@@ -484,6 +485,7 @@ body[dir="rtl"] .language-select {
     font-weight: 600;
     transition: all 0.3s ease;
     animation: fadeInUp 1s ease 0.3s both;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 :root[data-theme="grey"] .cta-button {
@@ -526,6 +528,16 @@ body[dir="rtl"] .language-select {
     margin-bottom: 3rem;
     color: var(--accent);
     font-weight: 700;
+    font-family: 'Playfair Display', serif;
+}
+
+/* Apply serif font to all H2 headings */
+h2 {
+    font-family: 'Playfair Display', serif;
+}
+
+body[dir="rtl"] h2 {
+    font-family: 'Cairo', 'Playfair Display', serif;
 }
 
 /* About Section */
@@ -1546,6 +1558,25 @@ body[dir="rtl"] .faq-question {
 .footer-section h4 {
     color: var(--accent);
     margin-bottom: 1rem;
+}
+
+.footer-logo-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.footer-logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+    flex-shrink: 0;
+}
+
+body[dir="rtl"] .footer-logo-title {
+    flex-direction: row-reverse;
 }
 
 .contact-heading-link {
