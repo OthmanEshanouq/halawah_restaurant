@@ -741,9 +741,9 @@ function initializeTodayButton() {
         const todayText = todayBtn.querySelector('span');
         if (todayText) {
             if (currentLanguage === 'ar') {
-                todayText.textContent = 'اليوم';
+                todayText.textContent = 'احجز طاولة';
             } else {
-                todayText.textContent = 'Today';
+                todayText.textContent = 'Make a Reservation';
             }
         }
     }

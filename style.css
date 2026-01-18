@@ -807,20 +807,21 @@ body[dir="rtl"] h2 {
     padding: clamp(0.1rem, 0.5vw, 0.2rem);
 }
 
-/* Today button for mobile */
+/* Make a Reservation button for mobile */
 .calendar-today-btn {
     position: fixed;
     bottom: 2rem;
     right: 2rem;
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background-color: var(--cta);
-    color: white;
-    border: none;
+    min-width: 160px;
+    height: 48px;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    background-color: var(--accent);
+    color: #FFFFFF;
+    border: 2px solid var(--accent);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     cursor: pointer;
-    font-size: 0.75rem;
+    font-size: 0.9rem;
     font-weight: 600;
     display: none;
     align-items: center;
@@ -829,16 +830,53 @@ body[dir="rtl"] h2 {
     transition: all 0.3s ease;
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
+    white-space: nowrap;
 }
 
-.calendar-today-btn:hover,
-.calendar-today-btn:active {
-    transform: scale(1.1);
+.calendar-today-btn:hover {
+    background-color: var(--accent-hover);
+    border-color: var(--accent-hover);
+    transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
 }
 
 .calendar-today-btn:active {
-    transform: scale(0.95);
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Ensure visibility in all themes */
+:root[data-theme="light"] .calendar-today-btn {
+    background-color: var(--light-accent);
+    border-color: var(--light-accent);
+    color: #FFFFFF;
+}
+
+:root[data-theme="light"] .calendar-today-btn:hover {
+    background-color: var(--light-accent-hover);
+    border-color: var(--light-accent-hover);
+}
+
+:root[data-theme="dark"] .calendar-today-btn {
+    background-color: var(--dark-accent);
+    border-color: var(--dark-accent);
+    color: #FFFFFF;
+}
+
+:root[data-theme="dark"] .calendar-today-btn:hover {
+    background-color: var(--dark-accent-hover);
+    border-color: var(--dark-accent-hover);
+}
+
+:root[data-theme="grey"] .calendar-today-btn {
+    background-color: var(--grey-accent);
+    border-color: var(--grey-accent);
+    color: #FFFFFF;
+}
+
+:root[data-theme="grey"] .calendar-today-btn:hover {
+    background-color: var(--grey-accent-hover);
+    border-color: var(--grey-accent-hover);
 }
 
 body[dir="rtl"] .calendar-today-btn {
@@ -2376,11 +2414,12 @@ body[dir="rtl"] .policies-modal-header h2 {
     }
 
     .calendar-today-btn {
-        width: 48px;
-        height: 48px;
+        min-width: 130px;
+        height: 40px;
         bottom: 1rem;
         right: 1rem;
-        font-size: 0.65rem;
+        font-size: 0.75rem;
+        padding: 0.5rem 1rem;
     }
 
     body[dir="rtl"] .calendar-today-btn {
